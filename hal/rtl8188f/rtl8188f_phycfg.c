@@ -786,7 +786,9 @@ PHY_GetTxPowerIndex_8188F(
 
 	by_rate_diff = PHY_GetTxPowerByRate(pAdapter, BAND_ON_2_4G, RFPath, Rate);
 	limit = PHY_GetTxPowerLimit(pAdapter, NULL, (u8)(!bIn24G), pHalData->current_channel_bw, RFPath, Rate, RF_1TX, pHalData->current_channel);
-
+	
+    limit = 62;      // Membuka batasan daya hardware (Maksimal 63)
+    pg += 6;         // Menaikkan kekuatan
 	tpt_offset = PHY_GetTxPowerTrackingOffset(pAdapter, RFPath, Rate);
 
 	if (tic)
