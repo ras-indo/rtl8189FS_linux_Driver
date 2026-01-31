@@ -2131,8 +2131,11 @@ _PLATFORM_FILES += platform/platform_aml_s905_sdio.o
 endif
 
 ARCH ?= arm64
-CROSS_COMPILE ?= 
-KSRC := /lib/modules/$(shell uname -r)/build
+CROSS_COMPILE ?= /4.4_S905L_8822bs_compile/gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux/bin/aarch64-linux-gnu-
+ifndef KSRC
+KSRC := /4.4_S905L_8822bs_compile/common
+# To locate output files in a separate directory.
+KSRC += O=/4.4_S905L_8822bs_compile/KERNEL_OBJ
 endif
 
 ifeq ($(CONFIG_RTL8822B), y)
