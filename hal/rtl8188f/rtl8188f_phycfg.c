@@ -787,29 +787,12 @@ PHY_GetTxPowerIndex_8188F(
 	by_rate_diff = PHY_GetTxPowerByRate(pAdapter, BAND_ON_2_4G, RFPath, Rate);
 	limit = PHY_GetTxPowerLimit(pAdapter, NULL, (u8)(!bIn24G), pHalData->current_channel_bw, RFPath, Rate, RF_1TX, pHalData->current_channel);
 
-	/* ---------------- MODIFIKASI MULAI ---------------- */
-	/* 1. FORCE UNLOCK LIMIT */
-	/* Mengatur limit ke nilai maksimum hardware (biasanya 63/0x3F untuk Realtek) 
-	   agar tidak dibatasi oleh regulasi wilayah (CRDA). */
-	limit = 63; 
-
-	/* 2. TX GAIN BOOST */
-	/* Menambahkan offset manual ke Power Group (PG).
-	   Realtek biasanya menggunakan step 0.5dBm. 
-	   Nilai 6 = +3dBm, Nilai 10 = +5dBm. 
-	   Hati-hati jangan terlalu tinggi agar chip tidak overheat/rusak. */
-	pg += 8; 
-	/* ---------------- MODIFIKASI SELESAI ---------------- */
-
 	tpt_offset = PHY_GetTxPowerTrackingOffset(pAdapter, RFPath, Rate);
 
 	if (tic)
 		txpwr_idx_comp_set(tic, RF_1TX, pg, by_rate_diff, limit, tpt_offset, 0, 0, 0);
 
-	/* Kode asli membatasi diff berdasarkan limit, karena limit sudah kita set 63, 
-	   baris ini aman dilewati atau biarkan saja bekerja */
 	by_rate_diff = by_rate_diff > limit ? limit : by_rate_diff;
-	
 	power_idx = pg + by_rate_diff + tpt_offset;
 
 	if (power_idx < 0)

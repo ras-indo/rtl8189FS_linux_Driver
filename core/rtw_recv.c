@@ -103,22 +103,22 @@ sint _rtw_init_recv_priv(struct recv_priv *precvpriv, _adapter *padapter)
 
 	rtw_os_recv_resource_init(precvpriv, padapter);
 
-	/* --- MODIFIKASI: MENAIKKAN JUMLAH RECV FRAME (2x Lipat) --- */
-    #define RECV_FRAME_MUL 2
-
-	precvpriv->pallocated_frame_buf = rtw_zvmalloc((NR_RECVFRAME * RECV_FRAME_MUL) * sizeof(union recv_frame) + RXFRAME_ALIGN_SZ);
+	precvpriv->pallocated_frame_buf = rtw_zvmalloc(NR_RECVFRAME * sizeof(union recv_frame) + RXFRAME_ALIGN_SZ);
 
 	if (precvpriv->pallocated_frame_buf == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
+	/* _rtw_memset(precvpriv->pallocated_frame_buf, 0, NR_RECVFRAME * sizeof(union recv_frame) + RXFRAME_ALIGN_SZ); */
 
 	precvpriv->precv_frame_buf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(precvpriv->pallocated_frame_buf), RXFRAME_ALIGN_SZ);
+	/* precvpriv->precv_frame_buf = precvpriv->pallocated_frame_buf + RXFRAME_ALIGN_SZ - */
+	/*						((SIZE_PTR) (precvpriv->pallocated_frame_buf) &(RXFRAME_ALIGN_SZ-1)); */
 
 	precvframe = (union recv_frame *) precvpriv->precv_frame_buf;
 
 
-	for (i = 0; i < (NR_RECVFRAME * RECV_FRAME_MUL) ; i++) {
+	for (i = 0; i < NR_RECVFRAME ; i++) {
 		_rtw_init_listhead(&(precvframe->u.list));
 
 		rtw_list_insert_tail(&(precvframe->u.list), &(precvpriv->free_recv_queue.queue));
@@ -2469,11 +2469,7 @@ static void recvframe_expand_pkt(
 	/* (1536 + RXDESC_SIZE + drvinfo_sz) to reassemble packet */
 	/*	8 is for skb->data 8 bytes alignment.
 	*	alloc_sz = _RND(1536 + RXDESC_SIZE + pfhdr->attrib.drvinfosize + shift_sz + 8, 128); */
-	
-    /* --- MODIFIKASI: BESARKAN UKURAN ALOKASI SKB --- */
-    /* Default: 1664. Ubah ke 4096 untuk menampung Jumbo frame/AMSDU lebih baik */
-	alloc_sz = 4096; 
-    /* ----------------------------------------------- */
+	alloc_sz = 1664; /* round (1536 + 24 + 32 + shift_sz + 8) to 128 bytes alignment */
 
 	/* 3 1. alloc new skb */
 	/* prepare extra space for 4 bytes alignment */

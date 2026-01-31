@@ -105,8 +105,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	Please also apply  free_txobj to link_up all the xmit_frames...
 	*/
 
-	#define XMIT_FRAME_MUL 2 
-	pxmitpriv->pallocated_frame_buf = rtw_zvmalloc((NR_XMITFRAME * XMIT_FRAME_MUL) * sizeof(struct xmit_frame) + 4);
+	pxmitpriv->pallocated_frame_buf = rtw_zvmalloc(NR_XMITFRAME * sizeof(struct xmit_frame) + 4);
 
 	if (pxmitpriv->pallocated_frame_buf  == NULL) {
 		pxmitpriv->pxmit_frame_buf = NULL;
@@ -114,10 +113,12 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 		goto exit;
 	}
 	pxmitpriv->pxmit_frame_buf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->pallocated_frame_buf), 4);
+	/* pxmitpriv->pxmit_frame_buf = pxmitpriv->pallocated_frame_buf + 4 - */
+	/*						((SIZE_PTR) (pxmitpriv->pallocated_frame_buf) &3); */
 
 	pxframe = (struct xmit_frame *) pxmitpriv->pxmit_frame_buf;
 
-	for (i = 0; i < (NR_XMITFRAME * XMIT_FRAME_MUL); i++) {
+	for (i = 0; i < NR_XMITFRAME; i++) {
 		_rtw_init_listhead(&(pxframe->list));
 
 		pxframe->padapter = padapter;
@@ -133,7 +134,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 		pxframe++;
 	}
 
-	pxmitpriv->free_xmitframe_cnt = NR_XMITFRAME * XMIT_FRAME_MUL; // Update counter
+	pxmitpriv->free_xmitframe_cnt = NR_XMITFRAME;
 
 	pxmitpriv->frag_len = MAX_FRAG_THRESHOLD;
 
@@ -142,11 +143,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	_rtw_init_queue(&pxmitpriv->free_xmitbuf_queue);
 	_rtw_init_queue(&pxmitpriv->pending_xmitbuf_queue);
 
-	/* --- MODIFIKASI: MENAIKKAN JUMLAH & SIZE XMIT BUFFER (2x Lipat) --- */
-    #define XMIT_BUFF_MUL 2
-    #define XMIT_BUFF_SZ_MUL 1 /* Besarkan ukuran per buffer */
-
-	pxmitpriv->pallocated_xmitbuf = rtw_zvmalloc((NR_XMITBUFF * XMIT_BUFF_MUL) * sizeof(struct xmit_buf) + 4);
+	pxmitpriv->pallocated_xmitbuf = rtw_zvmalloc(NR_XMITBUFF * sizeof(struct xmit_buf) + 4);
 
 	if (pxmitpriv->pallocated_xmitbuf  == NULL) {
 		res = _FAIL;
@@ -154,10 +151,12 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	}
 
 	pxmitpriv->pxmitbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->pallocated_xmitbuf), 4);
+	/* pxmitpriv->pxmitbuf = pxmitpriv->pallocated_xmitbuf + 4 - */
+	/*						((SIZE_PTR) (pxmitpriv->pallocated_xmitbuf) &3); */
 
 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
 
-	for (i = 0; i < (NR_XMITBUFF * XMIT_BUFF_MUL); i++) {
+	for (i = 0; i < NR_XMITBUFF; i++) {
 		_rtw_init_listhead(&pxmitbuf->list);
 
 		pxmitbuf->priv_data = NULL;
@@ -165,11 +164,10 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 		pxmitbuf->buf_tag = XMITBUF_DATA;
 
 		/* Tx buf allocation may fail sometimes, so sleep and retry. */
-		/* Perbesar ukuran alokasi buffer (MAX_XMITBUF_SZ * Multiplier) */
-		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, ((MAX_XMITBUF_SZ * XMIT_BUFF_SZ_MUL) + XMITBUF_ALIGN_SZ), _TRUE);
+		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ), _TRUE);
 		if (res == _FAIL) {
 			rtw_msleep_os(10);
-			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, ((MAX_XMITBUF_SZ * XMIT_BUFF_SZ_MUL) + XMITBUF_ALIGN_SZ), _TRUE);
+			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ), _TRUE);
 			if (res == _FAIL)
 				goto exit;
 		}
