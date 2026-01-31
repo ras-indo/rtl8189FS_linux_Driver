@@ -2138,8 +2138,10 @@ void rtw_init_pwrctrl_priv(PADAPTER padapter)
 	pwrctrlpriv->lps_rx_pkts = LPS_CHK_PKTS_RX;
 #endif
 
-	pwrctrlpriv->ips_mode = padapter->registrypriv.ips_mode;
-	pwrctrlpriv->ips_mode_req = padapter->registrypriv.ips_mode;
+// --- MODIFIKASI: DISABLE IPS ---
+	pwrctrlpriv->ips_mode = IPS_NONE;
+	pwrctrlpriv->ips_mode_req = IPS_NONE;
+	// -------------------------------
 	pwrctrlpriv->ips_deny_time = rtw_get_current_time();
 	pwrctrlpriv->lps_level = padapter->registrypriv.lps_level;
 #ifdef CONFIG_LPS_1T1R
@@ -2166,8 +2168,8 @@ void rtw_init_pwrctrl_priv(PADAPTER padapter)
 	if (padapter->registrypriv.mp_mode == 1)
 		pwrctrlpriv->power_mgnt = PS_MODE_ACTIVE ;
 	else
-		pwrctrlpriv->power_mgnt = padapter->registrypriv.power_mgnt; /* PS_MODE_MIN; */
-	pwrctrlpriv->bLeisurePs = (PS_MODE_ACTIVE != pwrctrlpriv->power_mgnt) ? _TRUE : _FALSE;
+	pwrctrlpriv->power_mgnt = PS_MODE_ACTIVE;
+	pwrctrlpriv->bLeisurePs = _FALSE;
 
 	pwrctrlpriv->bFwCurrentInPSMode = _FALSE;
 	pwrctrlpriv->lps_deny_time = rtw_get_current_time();
@@ -2688,7 +2690,7 @@ int rtw_pm_set_lps(_adapter *padapter, u8 mode)
 {
 	int	ret = 0;
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
-
+    mode = PS_MODE_ACTIVE;
 	if (mode < PS_MODE_NUM) {
 		if (pwrctrlpriv->power_mgnt != mode) {
 			if (PS_MODE_ACTIVE == mode)
@@ -2788,7 +2790,7 @@ int rtw_pm_set_wow_lps_1t1r(_adapter *padapter, u8 en)
 int rtw_pm_set_ips(_adapter *padapter, u8 mode)
 {
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
-
+    mode = IPS_NONE;
 	if (mode == IPS_NORMAL || mode == IPS_LEVEL_2) {
 		rtw_ips_mode_req(pwrctrlpriv, mode);
 		RTW_INFO("%s %s\n", __FUNCTION__, mode == IPS_NORMAL ? "IPS_NORMAL" : "IPS_LEVEL_2");

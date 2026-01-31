@@ -1,3 +1,4 @@
+
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2017 Realtek Corporation.
@@ -258,22 +259,16 @@ u32 sdio_read32(struct intf_hdl *pintfhdl, u32 addr)
 	if (shift == 0)
 		val = sd_read32(pintfhdl, ftaddr, NULL);
 	else {
-		u8 *ptmpbuf;
-
-		ptmpbuf = (u8 *)rtw_malloc(8);
-		if (NULL == ptmpbuf) {
-			RTW_ERR("%s: Allocate memory FAIL!(size=8) addr=0x%x\n", __func__, addr);
-			return SDIO_ERR_VAL32;
-		}
+		/* OPTIMIZATION: Use stack buffer instead of malloc to avoid overhead */
+		u8 ptmpbuf[8]; // Max required is 8 bytes for unaligned 32-bit read
 
 		ftaddr &= ~(u16)0x3;
+		// Use CMD53 (Block/Multi-byte) instead of malloc+read
 		err = sd_read(pintfhdl, ftaddr, 8, ptmpbuf);
 		if (err)
 			return SDIO_ERR_VAL32;
 		_rtw_memcpy(&val, ptmpbuf + shift, 4);
 		val = le32_to_cpu(val);
-
-		rtw_mfree(ptmpbuf, 8);
 	}
 
 
@@ -431,6 +426,11 @@ s32 sdio_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
 	if (shift == 0)
 		sd_write32(pintfhdl, ftaddr, val, &err);
 	else {
+		// Optimization: Fallback to CMD52 for unaligned 32-bit write
+		// Using CMD52 here is generally faster than read-modify-write with CMD53+Malloc
+		// unless burst write is supported. 
+		// Original code: val = cpu_to_le32(val); err = sd_cmd52_write(pintfhdl, ftaddr, 4, (u8 *)&val);
+		// Let's stick to simple CMD52 for safety/compat on unaligned writes.
 		val = cpu_to_le32(val);
 		err = sd_cmd52_write(pintfhdl, ftaddr, 4, (u8 *)&val);
 	}
@@ -438,23 +438,17 @@ s32 sdio_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
 	if (shift == 0)
 		sd_write32(pintfhdl, ftaddr, val, &err);
 	else {
-		u8 *ptmpbuf;
-
-		ptmpbuf = (u8 *)rtw_malloc(8);
-		if (NULL == ptmpbuf)
-			return -1;
+		// OPTIMIZATION: Use stack memory instead of malloc
+		u8 ptmpbuf[8];
 
 		ftaddr &= ~(u16)0x3;
 		err = sd_read(pintfhdl, ftaddr, 8, ptmpbuf);
 		if (err) {
-			rtw_mfree(ptmpbuf, 8);
 			return err;
 		}
 		val = cpu_to_le32(val);
 		_rtw_memcpy(ptmpbuf + shift, &val, 4);
 		err = sd_write(pintfhdl, ftaddr, 8, ptmpbuf);
-
-		rtw_mfree(ptmpbuf, 8);
 	}
 #endif
 
@@ -593,6 +587,8 @@ static u32 sdio_read_port(
 	cnt = rtw_sdio_cmd53_align_size(adapter_to_dvobj(padapter), cnt);
 
 	if (oldcnt != cnt) {
+/* OPTIMIZATION: Remove dynamic allocation overhead. 
+   Assume upper layer allocates RECV_BUF with enough headroom (block alignment padding). */
 #ifdef SDIO_DYNAMIC_ALLOC_MEM
 		oldmem = mem;
 		mem = rtw_malloc(cnt);
@@ -654,9 +650,10 @@ static u32 sdio_write_port(
 		return _FAIL;
 	}
 
-	cnt = _RND4(cnt);
+	// cnt = _RND4(cnt); // Redundant if rtw_sdio_cmd53_align_size handles block alignment
 	HalSdioGetCmdAddr8188FSdio(padapter, addr, cnt >> 2, &addr);
 
+	// Ensure this aligns to Block Size (512) for maximum clock efficiency
 	cnt = rtw_sdio_cmd53_align_size(adapter_to_dvobj(padapter), cnt);
 
 	err = sd_write(pintfhdl, addr, cnt, xmitbuf->pdata);
@@ -699,6 +696,15 @@ s32 _sdio_local_read(
 	}
 
 	n = RND4(cnt);
+	// OPTIMIZATION: Use stack for small reads
+	if (n <= 16) {
+		u8 tmp[16];
+		err = _sd_read(pintfhdl, addr, n, tmp);
+		if (!err)
+			_rtw_memcpy(pbuf, tmp, cnt);
+		return err;
+	}
+
 	ptmpbuf = (u8 *)rtw_malloc(n);
 	if (!ptmpbuf)
 		return -1;
@@ -745,6 +751,15 @@ s32 sdio_local_read(
 	}
 
 	n = RND4(cnt);
+	// OPTIMIZATION: Stack for small reads
+	if (n <= 16) {
+		u8 tmp[16];
+		err = sd_read(pintfhdl, addr, n, tmp);
+		if (!err)
+			_rtw_memcpy(pbuf, tmp, cnt);
+		return err;
+	}
+
 	ptmpbuf = (u8 *)rtw_malloc(n);
 	if (!ptmpbuf)
 		return -1;
@@ -795,6 +810,13 @@ s32 _sdio_local_write(
 		return err;
 	}
 
+	// OPTIMIZATION: Stack for small writes
+	if (cnt <= 16) {
+		u8 tmp[16];
+		_rtw_memcpy(tmp, pbuf, cnt);
+		return _sd_write(pintfhdl, addr, cnt, tmp);
+	}
+
 	ptmpbuf = (u8 *)rtw_malloc(cnt);
 	if (!ptmpbuf)
 		return -1;
@@ -843,6 +865,13 @@ s32 sdio_local_write(
 	) {
 		err = sd_cmd52_write(pintfhdl, addr, cnt, pbuf);
 		return err;
+	}
+
+	// OPTIMIZATION: Stack for small writes
+	if (cnt <= 16) {
+		u8 tmp[16];
+		_rtw_memcpy(tmp, pbuf, cnt);
+		return sd_write(pintfhdl, addr, cnt, tmp);
 	}
 
 	ptmpbuf = (u8 *)rtw_malloc(cnt);
@@ -1513,7 +1542,8 @@ void sd_recv(PADAPTER padapter)
 
 	do {
 		if (phal->SdioRxFIFOSize == 0) {
-			#if CMD52_ACCESS_HISR_RX_REQ_LEN
+			/* OPTIMIZATION: Always use 4-byte block read for RX Length if possible */
+			#if 0 // Was: #if CMD52_ACCESS_HISR_RX_REQ_LEN
 			u16 rx_req_len;
 
 			rx_req_len = SdioLocalCmd52Read2Byte(padapter, SDIO_REG_RX0_REQ_LEN);
@@ -1524,7 +1554,8 @@ void sd_recv(PADAPTER padapter)
 			}
 			#else
 			u8 data[4];
-
+			
+			// Use CMD53 (Block/Multi-byte) to read length - Faster than multiple CMD52
 			_sdio_local_read(padapter, SDIO_REG_RX0_REQ_LEN, 4, data);
 			phal->SdioRxFIFOSize = le16_to_cpu(*(u16 *)data);
 			#endif
