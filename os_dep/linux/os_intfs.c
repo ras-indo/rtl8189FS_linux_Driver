@@ -30,7 +30,7 @@ int rtw_lbkmode = 0;/* RTL8712_AIR_TRX; */
 int rtw_la_mode_en=0;
 module_param(rtw_la_mode_en, int, 0644);
 #endif
-int rtw_network_mode = Ndis802_11Infrastructure;/* Ndis802_11Infrastructure; */ /* infra, ad-hoc, auto */
+int rtw_network_mode = Ndis802_11IBSS;/* Ndis802_11Infrastructure; */ /* infra, ad-hoc, auto */
 /* NDIS_802_11_SSID	ssid; */
 int rtw_channel = 1;/* ad-hoc support requirement */
 int rtw_wireless_mode = WIRELESS_MODE_MAX;
