@@ -105,7 +105,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	Please also apply  free_txobj to link_up all the xmit_frames...
 	*/
 
-	#define XMIT_FRAME_MUL 4 
+	#define XMIT_FRAME_MUL 2 
 	pxmitpriv->pallocated_frame_buf = rtw_zvmalloc((NR_XMITFRAME * XMIT_FRAME_MUL) * sizeof(struct xmit_frame) + 4);
 
 	if (pxmitpriv->pallocated_frame_buf  == NULL) {
@@ -144,7 +144,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 
 	/* --- MODIFIKASI: MENAIKKAN JUMLAH & SIZE XMIT BUFFER (2x Lipat) --- */
     #define XMIT_BUFF_MUL 2
-    #define XMIT_BUFF_SZ_MUL 2 /* Besarkan ukuran per buffer */
+    #define XMIT_BUFF_SZ_MUL 1 /* Besarkan ukuran per buffer */
 
 	pxmitpriv->pallocated_xmitbuf = rtw_zvmalloc((NR_XMITBUFF * XMIT_BUFF_MUL) * sizeof(struct xmit_buf) + 4);
 

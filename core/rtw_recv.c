@@ -103,8 +103,8 @@ sint _rtw_init_recv_priv(struct recv_priv *precvpriv, _adapter *padapter)
 
 	rtw_os_recv_resource_init(precvpriv, padapter);
 
-	/* --- MODIFIKASI: MENAIKKAN JUMLAH RECV FRAME (4x Lipat) --- */
-    #define RECV_FRAME_MUL 4
+	/* --- MODIFIKASI: MENAIKKAN JUMLAH RECV FRAME (2x Lipat) --- */
+    #define RECV_FRAME_MUL 2
 
 	precvpriv->pallocated_frame_buf = rtw_zvmalloc((NR_RECVFRAME * RECV_FRAME_MUL) * sizeof(union recv_frame) + RXFRAME_ALIGN_SZ);
 
