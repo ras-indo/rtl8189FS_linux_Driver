@@ -2301,10 +2301,15 @@ strip:
 install:
 	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
 	/sbin/depmod -a ${KVER}
+	# --- Tambahan Otomatis ---
+	/sbin/modprobe $(MODULE_NAME)
+	@echo "Driver $(MODULE_NAME) berhasil di-install dan diaktifkan!"
 
 uninstall:
+	/sbin/modprobe -r $(MODULE_NAME)
 	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
 	/sbin/depmod -a ${KVER}
+	@echo "Driver $(MODULE_NAME) berhasil di-nonaktifkan dan dihapus!"
 
 backup_rtlwifi:
 	@echo "Making backup rtlwifi drivers"
