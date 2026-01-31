@@ -9364,7 +9364,7 @@ static void rtw_cfg80211_preinit_wiphy(_adapter *adapter, struct wiphy *wiphy)
 #endif
 
 	wiphy->interface_modes =	BIT(NL80211_IFTYPE_STATION)
-								| BIT(NL80211_IFTYPE_ADHOC)
+//								| BIT(NL80211_IFTYPE_ADHOC)
 #ifdef CONFIG_AP_MODE
 								| BIT(NL80211_IFTYPE_AP)
 								#ifdef CONFIG_WIFI_MONITOR
