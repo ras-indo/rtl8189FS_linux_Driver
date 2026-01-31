@@ -77,7 +77,7 @@ CONFIG_REDUCE_TX_CPU_LOADING = n
 CONFIG_BR_EXT = y
 CONFIG_TDLS = n
 CONFIG_WIFI_MONITOR = y
-CONFIG_MCC_MODE = y
+CONFIG_MCC_MODE = n
 CONFIG_APPEND_VENDOR_IE_ENABLE = n
 CONFIG_RTW_NAPI = y
 CONFIG_RTW_GRO = n
@@ -2130,9 +2130,11 @@ ccflags-y += -DCONFIG_PLATFORM_OPS
 _PLATFORM_FILES += platform/platform_aml_s905_sdio.o
 endif
 
-ARCH ?= arm64
-CROSS_COMPILE ?= 
-KSRC := /lib/modules/$(shell uname -r)/build
+ARCH := arm64
+CROSS_COMPILE := 
+KVER := $(shell uname -r)
+KSRC := /lib/modules/$(KVER)/build
+MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
 endif
 
 ifeq ($(CONFIG_RTL8822B), y)
