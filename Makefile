@@ -2302,22 +2302,22 @@ strip:
 
 
 install:
-        install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
-        /sbin/depmod -a ${KVER}
-        # Tambahan untuk AKTIVASI INSTAN
-        /sbin/modprobe $(MODULE_NAME)
-        @echo "Driver $(MODULE_NAME) berhasil di-install, diaktifkan, dan diatur untuk otomatis boot."
+	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
+	/sbin/depmod -a ${KVER}
+	# Tambahan untuk AKTIVASI INSTAN
+	/sbin/modprobe $(MODULE_NAME)
+	@echo "Driver $(MODULE_NAME) berhasil di-install, diaktifkan, dan diatur untuk otomatis boot."
 
 uninstall:
-        # Matikan driver di RAM
-        /sbin/modprobe -r $(MODULE_NAME) || true
-        # Hapus file driver
-        rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
-        # Bersihkan daftar modul dan initramfs
-        /sbin/depmod -a ${KVER}
-        @echo "Memperbarui initramfs untuk menghapus modul..."
-        /usr/sbin/update-initramfs -u
-        @echo "Driver $(MODULE_NAME) berhasil di-nonaktifkan dan dihapus total!"
+	# Matikan driver di RAM
+	/sbin/modprobe -r $(MODULE_NAME) || true
+	# Hapus file driver
+	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
+	# Bersihkan daftar modul dan initramfs
+	/sbin/depmod -a ${KVER}
+	@echo "Memperbarui initramfs untuk menghapus modul..."
+	/usr/sbin/update-initramfs -u
+	@echo "Driver $(MODULE_NAME) berhasil di-nonaktifkan dan dihapus total!"
 
 backup_rtlwifi:
 	@echo "Making backup rtlwifi drivers"
