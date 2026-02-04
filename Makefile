@@ -2132,6 +2132,7 @@ endif
 
 ARCH := arm64
 CROSS_COMPILE :=
+ifndef KSRC
 KVER := $(shell uname -r)
 KSRC := /lib/modules/$(KVER)/build
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
@@ -2145,6 +2146,7 @@ USER_MODULE_NAME := 8822bs
 endif
 endif
 
+endif
 
 ifeq ($(CONFIG_PLATFORM_ZTE_ZX296716), y)
 ccflags-y += -Wno-error=date-time
@@ -2300,24 +2302,23 @@ modules:
 strip:
 	$(CROSS_COMPILE)strip $(MODULE_NAME).ko --strip-unneeded
 
-
 install:
-	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
-	/sbin/depmod -a ${KVER}
-	# Tambahan untuk AKTIVASI INSTAN
-	/sbin/modprobe $(MODULE_NAME)
-	@echo "Driver $(MODULE_NAME) berhasil di-install, diaktifkan, dan diatur untuk otomatis boot."
+        install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
+        /sbin/depmod -a ${KVER}
+        # Tambahan untuk AKTIVASI INSTAN
+        /sbin/modprobe $(MODULE_NAME)
+        @echo "Driver $(MODULE_NAME) berhasil di-install, diaktifkan, dan diatur untuk otomatis boot."
 
 uninstall:
-	# Matikan driver di RAM
-	/sbin/modprobe -r $(MODULE_NAME) || true
-	# Hapus file driver
-	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
-	# Bersihkan daftar modul dan initramfs
-	/sbin/depmod -a ${KVER}
-	@echo "Memperbarui initramfs untuk menghapus modul..."
-	/usr/sbin/update-initramfs -u
-	@echo "Driver $(MODULE_NAME) berhasil di-nonaktifkan dan dihapus total!"
+        # Matikan driver di RAM
+        /sbin/modprobe -r $(MODULE_NAME) || true
+        # Hapus file driver
+        rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
+        # Bersihkan daftar modul dan initramfs
+        /sbin/depmod -a ${KVER}
+        @echo "Memperbarui initramfs untuk menghapus modul..."
+        /usr/sbin/update-initramfs -u
+        @echo "Driver $(MODULE_NAME) berhasil di-nonaktifkan dan dihapus total!"
 
 backup_rtlwifi:
 	@echo "Making backup rtlwifi drivers"
