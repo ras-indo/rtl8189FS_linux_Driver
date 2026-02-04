@@ -218,9 +218,9 @@
 /*
  * Debug Related Config
  */
-#ifdef CONFIG_RTW_DEBUG
+
 #define DBG	1	/* for ODM & BTCOEX debug */
-#endif /* CONFIG_RTW_DEBUG */
+ /* CONFIG_RTW_DEBUG */
 
 #define DBG_CONFIG_ERROR_DETECT
 /* #define DBG_XMIT_BUF */
