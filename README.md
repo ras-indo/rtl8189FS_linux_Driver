@@ -1,4 +1,4 @@
-```
+
 # RTL8189FS Linux Driver for STB B860H / HG680P
 
 Driver ini digunakan untuk mengaktifkan Wi-Fi SDIO Realtek RTL8189FS pada STB seperti B860H dan HG680P. Driver sudah dikonfigurasi agar lebih stabil untuk penggunaan normal (STA only).
@@ -13,9 +13,9 @@ git clone https://github.com/ras-indo/rtl8189FS_linux_Driver
 cd rtl8189FS_linux_Driver
 ```
 2. Compile driver:
-``
+```
 make -j$(nproc)
-``
+```
 3. Install driver ke sistem dan aktifkan:
 ```
 sudo make install
