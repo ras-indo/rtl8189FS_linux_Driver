@@ -2125,6 +2125,7 @@ ccflags-y += -DCONFIG_IOCTL_CFG80211
 ccflags-y += -DRTW_USE_CFG80211_STA_EVENT
 # default setting for Android 5.x and later
 ccflags-y += -DCONFIG_RADIO_WORK
+
 ifeq ($(CONFIG_SDIO_HCI), y)                                          ccflags-y += -DCONFIG_PLATFORM_OPS
 _PLATFORM_FILES += platform/platform_aml_s905_sdio.o                  endif
 
