@@ -2132,11 +2132,10 @@ endif
 
 ARCH := arm64
 CROSS_COMPILE :=
-ifndef KSRC
 KVER := $(shell uname -r)
 KSRC := /lib/modules/$(KVER)/build
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
-endif
+
 
 
 ifeq ($(CONFIG_RTL8822B), y)
