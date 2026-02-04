@@ -378,7 +378,8 @@ static void _rtw_regd_init_wiphy(struct rtw_regulatory *reg, struct wiphy *wiphy
 	wiphy->flags &= ~WIPHY_FLAG_STRICT_REGULATORY;
 	wiphy->flags &= ~WIPHY_FLAG_DISABLE_BEACON_HINTS;
 #else
-	wiphy->regulatory_flags |= REGULATORY_CUSTOM_REG;
+	/* Matikan CUSTOM_REG agar kernel bisa mengatur kartu ini sepenuhnya */
+	wiphy->regulatory_flags &= ~REGULATORY_CUSTOM_REG; 
 	wiphy->regulatory_flags &= ~REGULATORY_STRICT_REG;
 	wiphy->regulatory_flags &= ~REGULATORY_DISABLE_BEACON_HINTS;
 #endif
