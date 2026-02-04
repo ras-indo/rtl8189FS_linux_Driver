@@ -2300,11 +2300,10 @@ strip:
 
 install:
         install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
-        
         /sbin/depmod -a ${KVER}
-        # Tambahan untuk AKTIVASI INSTAN
         /sbin/modprobe $(MODULE_NAME)
         @echo "Driver $(MODULE_NAME) berhasil di-install, diaktifkan, dan diatur untuk otomatis boot."
+
 
 uninstall:
         # Matikan driver di RAM
