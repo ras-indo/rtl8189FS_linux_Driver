@@ -389,10 +389,12 @@ static void _rtw_regd_init_wiphy(struct rtw_regulatory *reg, struct wiphy *wiphy
 	rtw_regd_apply_flags(wiphy);
 }
 
+extern void rtw_set_country(_adapter *adapter, const char *country_code);
+
 int rtw_regd_init(struct wiphy *wiphy)
 {
 #if 0
-	if (rtw_regd == NULL) {
+    if (rtw_regd == NULL) {
 		rtw_regd = (struct rtw_regulatory *)
 			   rtw_malloc(sizeof(struct rtw_regulatory));
 
@@ -411,3 +413,24 @@ int rtw_regd_init(struct wiphy *wiphy)
 	return 0;
 }
 #endif /* CONFIG_IOCTL_CFG80211 */
+
+
+#ifdef COMPILE_TIME_COUNTRY
+    {
+        /* Konversi wiphy ke adapter driver */
+        struct adapter *padapter = wiphy_to_adapter(wiphy);
+        
+        if (padapter) {
+            RTW_INFO("%s: Applying Compile-Time Country Code: %s\n", 
+                     __func__, COMPILE_TIME_COUNTRY);
+            
+            /* Panggil fungsi internal untuk set country */
+            /* Fungsi ini sama dengan yang dipanggil saat user mengetik 'iw reg set' */
+            rtw_set_country(padapter, COMPILE_TIME_COUNTRY);
+        }
+    }
+#endif
+    /* --------------------------------------------------------- */
+
+    return 0;
+}

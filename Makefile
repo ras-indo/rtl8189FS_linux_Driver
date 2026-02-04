@@ -1,3 +1,17 @@
+# Deteksi Country Code (membutuhkan koneksi internet dan curl)
+# Jika gagal, default ke 'ID' (Indonesia) atau '00' (World)
+DETECTED_COUNTRY := $(shell curl -s --connect-timeout 2 ipinfo.io/country || echo "ID")
+
+# Hapus newline/spasi jika ada
+DETECTED_COUNTRY := $(strip $(DETECTED_COUNTRY))
+
+# Tampilkan ke layar saat make berjalan
+$(info Building driver for Country: $(DETECTED_COUNTRY))
+
+# Masukkan ke flags compiler
+EXTRA_CFLAGS += -DCOMPILE_TIME_COUNTRY="\"$(DETECTED_COUNTRY)\""
+
+
 ccflags-y += -O1
 #ccflags-y += -O3
 #ccflags-y += -Wall
