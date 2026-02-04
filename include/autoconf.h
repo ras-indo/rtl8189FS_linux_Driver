@@ -220,8 +220,6 @@
  */
 #ifdef CONFIG_RTW_DEBUG
 #define DBG	1	/* for ODM & BTCOEX debug */
-#else /* !CONFIG_RTW_DEBUG */
-#define DBG	0	/* for ODM & BTCOEX debug */
 #endif /* CONFIG_RTW_DEBUG */
 
 #define DBG_CONFIG_ERROR_DETECT

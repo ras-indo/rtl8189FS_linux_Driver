@@ -2308,7 +2308,7 @@ install:
 	/sbin/modprobe $(MODULE_NAME)
 	# Tambahan untuk OTOMATISASI DAN KEAMANAN
 	@echo "$(MODULE_NAME)" | tee /etc/modules-load.d/$(MODULE_NAME).conf > /dev/null
-	@echo "options $(MODULE_NAME) rtw_power_mgnt=0 rtw_enusbss=0" | tee /etc/modprobe.d/$(MODULE_NAME).conf > /dev/null
+	@echo "options $(MODULE_NAME) rtw_power_mgnt=0 drv_mode=0 rtw_ht_enable=1 rtw_bw_mode=0" | tee /etc/modprobe.d/$(MODULE_NAME).conf > /dev/null
 	@echo "Memperbarui initramfs agar driver dimuat saat boot..."
 	/usr/sbin/update-initramfs -u
 	@echo "Driver $(MODULE_NAME) berhasil di-install, diaktifkan, dan diatur untuk otomatis boot."
