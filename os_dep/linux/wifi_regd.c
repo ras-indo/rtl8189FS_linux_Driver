@@ -390,6 +390,8 @@ static void _rtw_regd_init_wiphy(struct rtw_regulatory *reg, struct wiphy *wiphy
 }
 
 
+/* Pastikan ini adalah bagian akhir dari file os_dep/linux/wifi_regd.c */
+
 int rtw_regd_init(struct wiphy *wiphy)
 {
 	_rtw_regd_init_wiphy(NULL, wiphy);
@@ -398,14 +400,14 @@ int rtw_regd_init(struct wiphy *wiphy)
 	{
 		_adapter *padapter = (_adapter *)wiphy_priv(wiphy);
 		
-		// 1. Paksa cetak ke dmesg tanpa peduli level debug
+		/* Menggunakan pr_info agar pesan muncul di dmesg tanpa level debug tinggi */
 		pr_info("RTW: Auto-Applying Country: %s (Detected at Compile Time)\n", COMPILE_TIME_COUNTRY);
 
 		if (padapter) {
-			// 2. Set internal channel plan driver
+			/* Set internal driver channel plan */
 			rtw_set_country(padapter, COMPILE_TIME_COUNTRY);
 			
-			// 3. Kirim hint ke Kernel Linux (cfg80211)
+			/* Memberitahu Kernel Linux (cfg80211) untuk ganti region secara global */
 			regulatory_hint(wiphy, COMPILE_TIME_COUNTRY);
 		}
 	}
@@ -413,3 +415,5 @@ int rtw_regd_init(struct wiphy *wiphy)
 
 	return 0;
 }
+
+#endif /* CONFIG_IOCTL_CFG80211 - BARIS INI HARUS ADA DI PALING BAWAH */
