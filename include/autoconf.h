@@ -219,7 +219,7 @@
  * Debug Related Config
  */
 
-#define DBG	1	/* for ODM & BTCOEX debug */
+#define DBG	0	/* for ODM & BTCOEX debug */
  /* CONFIG_RTW_DEBUG */
 
 #define DBG_CONFIG_ERROR_DETECT
