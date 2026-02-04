@@ -2128,12 +2128,11 @@ ccflags-y += -DRTW_USE_CFG80211_STA_EVENT
 
 ifeq ($(CONFIG_SDIO_HCI), y)
 EXTRA_CFLAGS += -DCONFIG_PLATFORM_OPS
-_PLATFORM_FILES += platform/platform_aml_s905_sdio.o
+obj-y         += platform/platform_aml_s905_sdio.o
 endif
 
 ARCH := arm64
 CROSS_COMPILE :=
-
 KVER := $(shell uname -r)
 KSRC := /lib/modules/$(KVER)/build
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
