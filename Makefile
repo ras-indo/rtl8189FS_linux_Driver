@@ -2137,7 +2137,6 @@ KSRC := /lib/modules/$(KVER)/build
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
 # -------------------------------------------
 
-endif
 
 ifeq ($(CONFIG_RTL8822B), y)
 ifeq ($(CONFIG_SDIO_HCI), y)
