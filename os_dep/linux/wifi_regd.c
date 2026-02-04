@@ -390,6 +390,8 @@ static void _rtw_regd_init_wiphy(struct rtw_regulatory *reg, struct wiphy *wiphy
 }
 
 
+/* Ganti dari bagian rtw_regd_init sampai baris paling terakhir file ini */
+
 int rtw_regd_init(struct wiphy *wiphy)
 {
 	_rtw_regd_init_wiphy(NULL, wiphy);
@@ -398,17 +400,14 @@ int rtw_regd_init(struct wiphy *wiphy)
 	{
 		_adapter *padapter = (_adapter *)wiphy_priv(wiphy);
 		
+		/* Cetak ke dmesg */
 		pr_info("RTW: Auto-Applying Country: %s (Detected at Compile Time)\n", COMPILE_TIME_COUNTRY);
 
 		if (padapter) {
-			/* 1. Paksa isi alpha2 di struktur wiphy kernel */
-			wiphy->alpha2[0] = COMPILE_TIME_COUNTRY[0];
-			wiphy->alpha2[1] = COMPILE_TIME_COUNTRY[1];
-
-			/* 2. Set internal driver channel plan */
+			/* 1. Set internal driver channel plan (SUDAH TERBUKTI BERHASIL) */
 			rtw_set_country(padapter, COMPILE_TIME_COUNTRY);
 			
-			/* 3. Beri tahu kernel secara global */
+			/* 2. Beri tahu kernel Linux tentang perubahan negara ini */
 			regulatory_hint(wiphy, COMPILE_TIME_COUNTRY);
 		}
 	}
@@ -416,3 +415,5 @@ int rtw_regd_init(struct wiphy *wiphy)
 
 	return 0;
 }
+
+#endif /* CONFIG_IOCTL_CFG80211 */
