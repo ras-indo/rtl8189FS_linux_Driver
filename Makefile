@@ -2299,23 +2299,31 @@ strip:
 	$(CROSS_COMPILE)strip $(MODULE_NAME).ko --strip-unneeded
 
 install:
-    install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
-    /sbin/depmod -a ${KVER}
-    /sbin/modprobe $(MODULE_NAME)
-    @echo "Driver $(MODULE_NAME) berhasil di-install, diaktifkan, dan diatur untuk otomatis boot."
-
+	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
+	/sbin/depmod -a ${KVER}
+	# Tambahan untuk AKTIVASI INSTAN
+	/sbin/modprobe $(MODULE_NAME)
+	# Tambahan untuk OTOMATISASI DAN KEAMANAN
+	@echo "$(MODULE_NAME)" | tee /etc/modules-load.d/$(MODULE_NAME).conf > /dev/null
+	@echo "options $(MODULE_NAME) rtw_power_mgnt=0 rtw_enusbss=0" | tee /etc/modprobe.d/$(MODULE_NAME).conf > /dev/null
+	@echo "Memperbarui initramfs agar driver dimuat saat boot..."
+	/usr/sbin/update-initramfs -u
+	@echo "Driver $(MODULE_NAME) berhasil di-install, diaktifkan, dan diatur untuk otomatis boot."
 
 uninstall:
-     # Matikan driver di RAM
-     /sbin/modprobe -r $(MODULE_NAME) || true
-     # Hapus file driver
-     rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
-     # Bersihkan daftar modul dan initramfs
-     /sbin/depmod -a ${KVER}
-     @echo "Memperbarui initramfs untuk menghapus modul..."
-     /usr/sbin/update-initramfs -u
-     @echo "Driver $(MODULE_NAME) berhasil di-nonaktifkan dan dihapus total!"
-
+	# Matikan driver di RAM
+	/sbin/modprobe -r $(MODULE_NAME) || true 
+	# Hapus file driver
+	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
+	# Hapus file konfigurasi
+	rm -f /etc/modules-load.d/$(MODULE_NAME).conf
+	rm -f /etc/modprobe.d/$(MODULE_NAME).conf
+	# Bersihkan daftar modul dan initramfs
+	/sbin/depmod -a ${KVER}
+	@echo "Memperbarui initramfs untuk menghapus modul..."
+	/usr/sbin/update-initramfs -u
+	@echo "Driver $(MODULE_NAME) berhasil di-nonaktifkan dan dihapus total!"
+	
 backup_rtlwifi:
 	@echo "Making backup rtlwifi drivers"
 ifneq (,$(wildcard $(STAGINGMODDIR)/rtl*))
