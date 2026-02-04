@@ -23,7 +23,7 @@ ccflags-y += -I$(src)/include
 
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 
 ldflags-y += --strip-debug
 
@@ -53,9 +53,9 @@ CONFIG_SDIO_HCI = y
 CONFIG_GSPI_HCI = n
 ########################## Features ###########################
 CONFIG_MP_INCLUDED = y
-CONFIG_POWER_SAVING = y
-CONFIG_IPS_MODE = default
-CONFIG_LPS_MODE = default
+CONFIG_POWER_SAVING = n
+CONFIG_IPS_MODE = n
+CONFIG_LPS_MODE = n
 CONFIG_USB_AUTOSUSPEND = n
 CONFIG_HW_PWRP_DETECTION = n
 CONFIG_BT_COEXIST = n
@@ -72,11 +72,11 @@ CONFIG_RTW_CHPLAN = 0xFF
 CONFIG_RTW_ADAPTIVITY_EN = disable
 CONFIG_RTW_ADAPTIVITY_MODE = normal
 CONFIG_SIGNAL_SCALE_MAPPING = n
-CONFIG_80211W = n
+CONFIG_80211W = y
 CONFIG_REDUCE_TX_CPU_LOADING = n
 CONFIG_BR_EXT = y
 CONFIG_TDLS = n
-CONFIG_WIFI_MONITOR = n
+CONFIG_WIFI_MONITOR = y
 CONFIG_MCC_MODE = n
 CONFIG_APPEND_VENDOR_IE_ENABLE = n
 CONFIG_RTW_NAPI = n
@@ -88,13 +88,13 @@ CONFIG_RTW_WIFI_HAL = n
 CONFIG_ICMP_VOQ = n
 CONFIG_IP_R_MONITOR = n #arp VOQ and high rate
 ########################## Debug ###########################
-CONFIG_RTW_DEBUG = y
-# default log level is _DRV_INFO_ = 4,
+CONFIG_RTW_DEBUG = n
+# default log level is _DRV_INFO_ = 
 # please refer to "How_to_set_driver_debug_log_level.doc" to set the available level.
 CONFIG_RTW_LOG_LEVEL = 4
 
 # enable /proc/net/rtlxxxx/ debug interfaces
-CONFIG_PROC_DEBUG = y
+CONFIG_PROC_DEBUG = n
 
 ######################## Wake On Lan ##########################
 CONFIG_WOWLAN = n
@@ -114,7 +114,7 @@ CONFIG_PNO_SUPPORT = n
 CONFIG_PNO_SET_DEBUG = n
 CONFIG_AP_WOWLAN = n
 ######### Notify SDIO Host Keep Power During Syspend ##########
-CONFIG_RTW_SDIO_PM_KEEP_POWER = y
+CONFIG_RTW_SDIO_PM_KEEP_POWER = n
 ###################### MP HW TX MODE FOR VHT #######################
 CONFIG_MP_VHT_HW_TX_MODE = n
 ###################### Platform Related #######################
@@ -177,7 +177,7 @@ CONFIG_PLATFORM_HISILICON_HI3798 = n
 CONFIG_PLATFORM_NV_TK1 = n
 CONFIG_PLATFORM_NV_TK1_UBUNTU = n
 CONFIG_PLATFORM_RTL8197D = n
-CONFIG_PLATFORM_AML_S905 = n
+CONFIG_PLATFORM_AML_S905 = y
 CONFIG_PLATFORM_ZTE_ZX296716 = n
 ########### CUSTOMER ################################
 CONFIG_CUSTOMER_HUAWEI_GENERAL = n
@@ -1279,8 +1279,8 @@ ccflags-y += -DCONFIG_PLATFORM_NV_TK1
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 # default setting for Android 4.1, 4.2
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
-ccflags-y += -DCONFIG_CONCURRENT_MODE
-ccflags-y += -DCONFIG_P2P_IPS -DCONFIG_PLATFORM_ANDROID
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
+#ccflags-y += -DCONFIG_P2P_IPS -DCONFIG_PLATFORM_ANDROID
 # Enable this for Android 5.0
 ccflags-y += -DCONFIG_RADIO_WORK
 ccflags-y += -DRTW_VENDOR_EXT_SUPPORT
@@ -1324,7 +1324,7 @@ ccflags-y += -DCONFIG_LITTLE_ENDIAN
 #ccflags-y += -DRTW_ENABLE_WIFI_CONTROL_FUNC
 # default setting for Android 4.1, 4.2, 4.3, 4.4
 ccflags-y += -DCONFIG_PLATFORM_ACTIONS_ATM705X
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 
 # Enable this for Android 5.0
@@ -1345,7 +1345,7 @@ ccflags-y += -DCONFIG_LITTLE_ENDIAN
 ccflags-y += -DCONFIG_PLATFORM_ARM_SUN50IW1P1
 ccflags-y += -DCONFIG_TRAFFIC_PROTECT
 # default setting for Android 4.1, 4.2
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ccflags-y += -DCONFIG_RESUME_IN_WORKQUEUE
 ccflags-y += -DCONFIG_PLATFORM_OPS
@@ -1383,7 +1383,7 @@ KSRC:= /usr/src/Mstar_kernel/2.6.28.9/
 endif
 
 ifeq ($(CONFIG_PLATFORM_MSTAR), y)
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 ccflags-y += -DCONFIG_PLATFORM_MSTAR
@@ -1410,7 +1410,7 @@ ifeq ($(CONFIG_PLATFORM_ANDROID_INTEL_X86), y)
 ccflags-y += -DCONFIG_PLATFORM_ANDROID_INTEL_X86
 ccflags-y += -DCONFIG_PLATFORM_INTEL_BYT
 ccflags-y += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ANDROID
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ccflags-y += -DCONFIG_SKIP_SIGNAL_SCALE_MAPPING
 ifeq ($(CONFIG_SDIO_HCI), y)
@@ -1420,7 +1420,7 @@ endif
 
 ifeq ($(CONFIG_PLATFORM_JB_X86), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 SUBARCH := $(shell uname -m | sed -e s/i.86/i386/)
 ARCH := $(SUBARCH)
@@ -1571,7 +1571,7 @@ ifeq ($(CONFIG_PLATFORM_TEGRA3_CARDHU), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 # default setting for Android 4.1, 4.2
 ccflags-y += -DRTW_ENABLE_WIFI_CONTROL_FUNC
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ARCH := arm
 CROSS_COMPILE := /home/android_sdk/nvidia/tegra-16r3-partner-android-4.1_20120723/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
@@ -1583,7 +1583,7 @@ ifeq ($(CONFIG_PLATFORM_TEGRA4_DALMORE), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 # default setting for Android 4.1, 4.2
 ccflags-y += -DRTW_ENABLE_WIFI_CONTROL_FUNC
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ARCH := arm
 CROSS_COMPILE := /home/android_sdk/nvidia/tegra-17r9-partner-android-4.2-dalmore_20130131/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-
@@ -1610,7 +1610,7 @@ endif
 ifeq ($(CONFIG_PLATFORM_ARM_TCC8920_JB42), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 # default setting for Android 4.1, 4.2
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ARCH := arm
 CROSS_COMPILE := /home/android_sdk/Telechips/v13.03_r1-tcc-android-4.2.2_ds_patched/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-
@@ -1630,7 +1630,7 @@ ifeq ($(CONFIG_PLATFORM_ARM_RK3188), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ANDROID -DCONFIG_PLATFORM_ROCKCHIPS
 # default setting for Android 4.1, 4.2, 4.3, 4.4
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 # default setting for Power control
 ccflags-y += -DRTW_ENABLE_WIFI_CONTROL_FUNC
 ccflags-y += -DRTW_SUPPORT_PLATFORM_SHUTDOWN
@@ -1645,7 +1645,7 @@ ifeq ($(CONFIG_PLATFORM_ARM_RK3066), y)
 ccflags-y += -DCONFIG_PLATFORM_ARM_RK3066
 ccflags-y += -DRTW_ENABLE_WIFI_CONTROL_FUNC
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211
 ifeq ($(CONFIG_SDIO_HCI), y)
 ccflags-y += -DRTW_SUPPORT_PLATFORM_SHUTDOWN
@@ -1695,7 +1695,7 @@ ifeq ($(CONFIG_PLATFORM_ARM_SUNxI), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 ccflags-y += -DCONFIG_PLATFORM_ARM_SUNxI
 # default setting for Android 4.1, 4.2
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 
 ccflags-y += -DCONFIG_PLATFORM_OPS
@@ -1722,7 +1722,7 @@ ccflags-y += -DCONFIG_LITTLE_ENDIAN
 ccflags-y += -DCONFIG_PLATFORM_ARM_SUN6I
 ccflags-y += -DCONFIG_TRAFFIC_PROTECT
 # default setting for Android 4.1, 4.2, 4.3, 4.4
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ccflags-y +=  -DCONFIG_QOS_OPTIMIZATION
 
@@ -1754,7 +1754,7 @@ ccflags-y += -DCONFIG_LITTLE_ENDIAN
 ccflags-y += -DCONFIG_PLATFORM_ARM_SUN7I
 ccflags-y += -DCONFIG_TRAFFIC_PROTECT
 # default setting for Android 4.1, 4.2, 4.3, 4.4
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ccflags-y +=  -DCONFIG_QOS_OPTIMIZATION
 
@@ -1785,7 +1785,7 @@ ccflags-y += -DCONFIG_PLATFORM_ARM_SUN8I
 ccflags-y += -DCONFIG_PLATFORM_ARM_SUN8I_W3P1
 ccflags-y += -DCONFIG_TRAFFIC_PROTECT
 # default setting for Android 4.1, 4.2
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 
 ccflags-y += -DCONFIG_PLATFORM_OPS
@@ -1812,7 +1812,7 @@ ccflags-y += -DCONFIG_PLATFORM_ARM_SUN8I
 ccflags-y += -DCONFIG_PLATFORM_ARM_SUN8I_W5P1
 ccflags-y += -DCONFIG_TRAFFIC_PROTECT
 # default setting for Android 4.1, 4.2
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 
 # Enable this for Android 5.0
@@ -1844,7 +1844,7 @@ endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_RTD299X), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ifeq ($(CONFIG_ANDROID), y)
 # Enable this for Android 5.0
@@ -1857,7 +1857,7 @@ endif
 ifeq ($(CONFIG_PLATFORM_ARM_RTD299X_LG), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DRTW_P2P_GROUP_INTERFACE=1
 ccflags-y += -DCONFIG_IFACE_NUMBER=3
 #ccflags-y += -DCONFIG_FIX_HWPORT
@@ -1883,7 +1883,7 @@ endif
 ifeq ($(CONFIG_PLATFORM_HISILICON), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_HISILICON
 ifeq ($(SUPPORT_CONCURRENT),y)
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 endif
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ARCH := arm
@@ -1902,7 +1902,7 @@ ccflags-y += -DCONFIG_PLATFORM_HISILICON_HI3798
 #ccflags-y += -DCONFIG_PLATFORM_HISILICON_HI3798_MV200_HDMI_DONGLE
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 # default setting for Android
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211
 ccflags-y += -DRTW_USE_CFG80211_STA_EVENT
 # default setting for Android 5.x and later
@@ -1967,7 +1967,7 @@ endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_WMT), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ccflags-y += -DCONFIG_PLATFORM_OPS
 ifeq ($(CONFIG_SDIO_HCI), y)
@@ -1984,7 +1984,7 @@ ccflags-y += -DCONFIG_LITTLE_ENDIAN
 #ccflags-y += -DCONFIG_PLATFORM_ARM_SUN7I
 ccflags-y += -DCONFIG_TRAFFIC_PROTECT
 # default setting for Android 4.1, 4.2
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 #ccflags-y +=  -DCONFIG_QOS_OPTIMIZATION
 ccflags-y += -DCONFIG_QOS_OPTIMIZATION
@@ -2014,7 +2014,7 @@ ifeq ($(CONFIG_PLATFORM_RTK119X_AM), y)
 ccflags-y += -DCONFIG_PLATFORM_RTK119X_AM
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 ccflags-y += -DCONFIG_TRAFFIC_PROTECT
-ccflags-y += -DCONFIG_CONCURRENT_MODE -DCONFIG_FULL_CH_IN_P2P_HANDSHAKE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE -DCONFIG_FULL_CH_IN_P2P_HANDSHAKE
 ccflags-y += -DCONFIG_IFACE_NUMBER=3
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 
@@ -2035,7 +2035,7 @@ ccflags-y += -DCONFIG_LITTLE_ENDIAN
 ccflags-y += -DRTK_129X_PLATFORM
 ccflags-y += -DCONFIG_TRAFFIC_PROTECT
 # default setting for Android 4.1, 4.2
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 #ccflags-y += -DCONFIG_P2P_IPS -DCONFIG_QOS_OPTIMIZATION
 ccflags-y += -DCONFIG_QOS_OPTIMIZATION
@@ -2085,7 +2085,7 @@ endif
 ifeq ($(CONFIG_PLATFORM_NOVATEK_NT72668), y)
 ccflags-y += -DCONFIG_PLATFORM_NOVATEK_NT72668
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ccflags-y += -DCONFIG_USE_USB_BUFFER_ALLOC_RX
 ccflags-y += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
@@ -2099,7 +2099,7 @@ endif
 ifeq ($(CONFIG_PLATFORM_ARM_TCC8930_JB42), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 # default setting for Android 4.1, 4.2
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ARCH := arm
 CROSS_COMPILE := /home/android_sdk/Telechips/v13.05_r1-tcc-android-4.2.2_tcc893x-evm_build/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-
@@ -2115,28 +2115,26 @@ CROSS_COMPILE:= $(DIR_LINUX)/../toolchain/rsdk-1.5.5-5281-EB-2.6.30-0.9.30.3-110
 KSRC := $(DIR_LINUX)
 endif
 
+
 ifeq ($(CONFIG_PLATFORM_AML_S905), y)
 ccflags-y += -DCONFIG_PLATFORM_AML_S905
 ccflags-y += -DCONFIG_LITTLE_ENDIAN -fno-pic
 # default setting for Android
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211
 ccflags-y += -DRTW_USE_CFG80211_STA_EVENT
 # default setting for Android 5.x and later
 ccflags-y += -DCONFIG_RADIO_WORK
+ifeq ($(CONFIG_SDIO_HCI), y)                                          ccflags-y += -DCONFIG_PLATFORM_OPS
+_PLATFORM_FILES += platform/platform_aml_s905_sdio.o                  endif
 
-ifeq ($(CONFIG_SDIO_HCI), y)
-ccflags-y += -DCONFIG_PLATFORM_OPS
-_PLATFORM_FILES += platform/platform_aml_s905_sdio.o
+ARCH := arm64
+CROSS_COMPILE :=
+KVER := $(shell uname -r)
+KSRC := /lib/modules/$(KVER)/build
+MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
 endif
 
-ARCH ?= arm64
-CROSS_COMPILE ?= /4.4_S905L_8822bs_compile/gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux/bin/aarch64-linux-gnu-
-ifndef KSRC
-KSRC := /4.4_S905L_8822bs_compile/common
-# To locate output files in a separate directory.
-KSRC += O=/4.4_S905L_8822bs_compile/KERNEL_OBJ
-endif
 
 ifeq ($(CONFIG_RTL8822B), y)
 ifeq ($(CONFIG_SDIO_HCI), y)
@@ -2152,7 +2150,7 @@ ccflags-y += -Wno-error=date-time
 ccflags-y += -DCONFIG_PLATFORM_ZTE_ZX296716
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 # default setting for Android
-ccflags-y += -DCONFIG_CONCURRENT_MODE
+# ccflags-y += -DCONFIG_CONCURRENT_MODE
 ccflags-y += -DCONFIG_IOCTL_CFG80211
 ccflags-y += -DRTW_USE_CFG80211_STA_EVENT
 # default setting for Android 5.x and later
@@ -2302,12 +2300,22 @@ strip:
 	$(CROSS_COMPILE)strip $(MODULE_NAME).ko --strip-unneeded
 
 install:
-	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
-	/sbin/depmod -a ${KVER}
+        install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
+        /sbin/depmod -a ${KVER}
+        # Tambahan untuk AKTIVASI INSTAN
+        /sbin/modprobe $(MODULE_NAME)
+        @echo "Driver $(MODULE_NAME) berhasil di-install, diaktifkan, dan diatur untuk otomatis boot."
 
 uninstall:
-	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
-	/sbin/depmod -a ${KVER}
+        # Matikan driver di RAM
+        /sbin/modprobe -r $(MODULE_NAME) || true
+        # Hapus file driver
+        rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
+        # Bersihkan daftar modul dan initramfs
+        /sbin/depmod -a ${KVER}
+        @echo "Memperbarui initramfs untuk menghapus modul..."
+        /usr/sbin/update-initramfs -u
+        @echo "Driver $(MODULE_NAME) berhasil di-nonaktifkan dan dihapus total!"
 
 backup_rtlwifi:
 	@echo "Making backup rtlwifi drivers"
