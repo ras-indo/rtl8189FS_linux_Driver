@@ -59,20 +59,20 @@
 	/* #define CONFIG_FIND_BEST_CHANNEL */
 #endif
 
-//#define CONFIG_P2P
-//#ifdef CONFIG_P2P
+#define CONFIG_P2P
+#ifdef CONFIG_P2P
 	/* Added by Albert 20110812 */
 	/* The CONFIG_WFD is for supporting the Wi-Fi display */
-//	#define CONFIG_WFD
+	#define CONFIG_WFD
 
-//	#define CONFIG_P2P_REMOVE_GROUP_INFO
+	#define CONFIG_P2P_REMOVE_GROUP_INFO
 
 	/* #define CONFIG_DBG_P2P */
-//	#define CONFIG_P2P_PS
-	//#define CONFIG_P2P_OP_CHK_SOCIAL_CH
-//	#define CONFIG_CFG80211_ONECHANNEL_UNDER_CONCURRENT  /* replace CONFIG_P2P_CHK_INVITE_CH_LIST flag */
+	#define CONFIG_P2P_PS
+	#define CONFIG_P2P_OP_CHK_SOCIAL_CH
+	#define CONFIG_CFG80211_ONECHANNEL_UNDER_CONCURRENT  /* replace CONFIG_P2P_CHK_INVITE_CH_LIST flag */
 	/*#define CONFIG_P2P_INVITE_IOT*/
-//#endif
+#endif
 
 /* Added by Kurt 20110511 */
 #ifdef CONFIG_TDLS
@@ -86,15 +86,15 @@
 #endif
 
 /* #define CONFIG_CONCURRENT_MODE */	/* Set from Makefile */
-//#ifdef CONFIG_CONCURRENT_MODE
-//	#define CONFIG_RUNTIME_PORT_SWITCH
+#ifdef CONFIG_CONCURRENT_MODE
+	#define CONFIG_RUNTIME_PORT_SWITCH
 	/* #define DBG_RUNTIME_PORT_SWITCH */
 
 
-//	#ifndef CONFIG_RUNTIME_PORT_SWITCH
-//		#define CONFIG_TSF_RESET_OFFLOAD			/* For 2 PORT TSF SYNC. */
-//	#endif
-//#endif /* CONFIG_CONCURRENT_MODE */
+	#ifndef CONFIG_RUNTIME_PORT_SWITCH
+		#define CONFIG_TSF_RESET_OFFLOAD			/* For 2 PORT TSF SYNC. */
+	#endif
+#endif /* CONFIG_CONCURRENT_MODE */
 
 #define CONFIG_LAYER2_ROAMING
 #define CONFIG_LAYER2_ROAMING_RESUME
