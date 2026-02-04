@@ -2300,6 +2300,7 @@ strip:
 
 install:
         install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
+        
         /sbin/depmod -a ${KVER}
         # Tambahan untuk AKTIVASI INSTAN
         /sbin/modprobe $(MODULE_NAME)
