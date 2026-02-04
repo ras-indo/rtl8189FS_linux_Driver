@@ -2126,10 +2126,9 @@ ccflags-y += -DRTW_USE_CFG80211_STA_EVENT
 # default setting for Android 5.x and later
 #ccflags-y += -DCONFIG_RADIO_WORK
 
-ifeq ($(CONFIG_SDIO_HCI), y)
+
 EXTRA_CFLAGS += -DCONFIG_PLATFORM_OPS
-obj-y         += platform/platform_aml_s905_sdio.o
-endif
+_PLATFORM_FILES += platform/platform_aml_s905_sdio.o
 
 ARCH := arm64
 CROSS_COMPILE :=
