@@ -2124,11 +2124,7 @@ ccflags-y += -DCONFIG_LITTLE_ENDIAN -fno-pic
 ccflags-y += -DCONFIG_IOCTL_CFG80211
 ccflags-y += -DRTW_USE_CFG80211_STA_EVENT
 # default setting for Android 5.x and later
-ccflags-y += -DCONFIG_RADIO_WORK
-
-ifeq ($(CONFIG_SDIO_HCI), y)                                          
-ccflags-y += -DCONFIG_PLATFORM_OPS_PLATFORM_FILES += platform/platform_aml_s905_sdio.o                  
-endif
+#ccflags-y += -DCONFIG_RADIO_WORK
 
 ARCH := arm64
 CROSS_COMPILE :=
