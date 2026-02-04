@@ -2145,7 +2145,6 @@ USER_MODULE_NAME := 8822bs
 endif
 endif
 
-endif
 
 ifeq ($(CONFIG_PLATFORM_ZTE_ZX296716), y)
 ccflags-y += -Wno-error=date-time
