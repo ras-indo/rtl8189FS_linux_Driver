@@ -392,35 +392,24 @@ static void _rtw_regd_init_wiphy(struct rtw_regulatory *reg, struct wiphy *wiphy
 
 int rtw_regd_init(struct wiphy *wiphy)
 {
-#if 0
-	if (rtw_regd == NULL) {
-		rtw_regd = (struct rtw_regulatory *)
-			   rtw_malloc(sizeof(struct rtw_regulatory));
-
-		rtw_regd->alpha2[0] = '9';
-		rtw_regd->alpha2[1] = '9';
-
-		rtw_regd->country_code = COUNTRY_CODE_USER;
-	}
-
-	RTW_INFO("%s: Country alpha2 being used: %c%c\n",
-		 __func__, rtw_regd->alpha2[0], rtw_regd->alpha2[1]);
-#endif
-
 	_rtw_regd_init_wiphy(NULL, wiphy);
 
-	/* --- TAMBAHAN AUTO DETECT --- */
 #ifdef COMPILE_TIME_COUNTRY
 	{
 		_adapter *padapter = (_adapter *)wiphy_priv(wiphy);
+		
+		// 1. Paksa cetak ke dmesg tanpa peduli level debug
+		pr_info("RTW: Auto-Applying Country: %s (Detected at Compile Time)\n", COMPILE_TIME_COUNTRY);
+
 		if (padapter) {
-			RTW_INFO("RTW: Auto-Applying Country: %s (via Compile Time)\n", COMPILE_TIME_COUNTRY);
+			// 2. Set internal channel plan driver
 			rtw_set_country(padapter, COMPILE_TIME_COUNTRY);
+			
+			// 3. Kirim hint ke Kernel Linux (cfg80211)
+			regulatory_hint(wiphy, COMPILE_TIME_COUNTRY);
 		}
 	}
 #endif
-	/* ---------------------------- */
 
 	return 0;
 }
-#endif /* CONFIG_IOCTL_CFG80211 */
