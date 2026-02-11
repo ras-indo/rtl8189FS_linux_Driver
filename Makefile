@@ -1294,7 +1294,7 @@ ccflags-y += -DCONFIG_LITTLE_ENDIAN
 # default setting for Android 4.1, 4.2
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 #ccflags-y += -DCONFIG_CONCURRENT_MODE
-ccflags-y += -DCONFIG_P2P_IPS -DCONFIG_PLATFORM_ANDROID
+#ccflags-y += -DCONFIG_P2P_IPS -DCONFIG_PLATFORM_ANDROID
 # Enable this for Android 5.0
 ccflags-y += -DCONFIG_RADIO_WORK
 ccflags-y += -DRTW_VENDOR_EXT_SUPPORT
@@ -1872,7 +1872,7 @@ ifeq ($(CONFIG_PLATFORM_ARM_RTD299X_LG), y)
 ccflags-y += -DCONFIG_LITTLE_ENDIAN
 ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 #ccflags-y += -DCONFIG_CONCURRENT_MODE
-ccflags-y += -DRTW_P2P_GROUP_INTERFACE=1
+#ccflags-y += -DRTW_P2P_GROUP_INTERFACE=1
 ccflags-y += -DCONFIG_IFACE_NUMBER=3
 #ccflags-y += -DCONFIG_FIX_HWPORT
 ccflags-y += -DLGE_PRIVATE
@@ -2062,7 +2062,7 @@ endif
 ccflags-y += -Wno-error=date-time
 # default setting for Android 7.0
 ifeq ($(RTK_ANDROID_VERSION), nougat)
-ccflags-y += -DRTW_P2P_GROUP_INTERFACE=1
+#ccflags-y += -DRTW_P2P_GROUP_INTERFACE=1
 endif
 #ccflags-y += -DCONFIG_#PLATFORM_OPS
 ifeq ($(CONFIG_USB_HCI), y)
