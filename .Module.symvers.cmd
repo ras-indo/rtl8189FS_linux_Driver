@@ -1,0 +1,1 @@
+cmd_/root/rtl8189FS_linux_Driver/Module.symvers :=  sed 's/ko$$/o/'  /root/rtl8189FS_linux_Driver/modules.order | scripts/mod/modpost       -o /root/rtl8189FS_linux_Driver/Module.symvers -e -i Module.symvers -T - 

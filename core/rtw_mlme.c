@@ -1719,37 +1719,43 @@ void rtw_free_assoc_resources(_adapter *adapter, u8 lock_scanned_queue)
 	}
 
 	if (lock_scanned_queue)
-		_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
+    _enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
 
-	if (check_fwstate(pmlmepriv, WIFI_UNDER_WPS) || (pmlmepriv->wpa_phase == _TRUE)){
-		RTW_INFO("Dont free disconnecting network of scanned_queue due to uner %s %s phase\n\n",
-			check_fwstate(pmlmepriv, WIFI_UNDER_WPS) ? "WPS" : "",
-			(pmlmepriv->wpa_phase == _TRUE) ? "WPA" : "");
-	} else {
-		pwlan = _rtw_find_same_network(&pmlmepriv->scanned_queue, tgt_network);
-		if (pwlan) {
-			pwlan->fixed = _FALSE;
-
-			RTW_INFO("Free disconnecting network of scanned_queue\n");
-			rtw_free_network_nolock(adapter, pwlan);
+if (check_fwstate(pmlmepriv, WIFI_UNDER_WPS) || (pmlmepriv->wpa_phase == _TRUE)) {
+    RTW_INFO("Dont free disconnecting network of scanned_queue due to under %s %s phase\n\n",
+        check_fwstate(pmlmepriv, WIFI_UNDER_WPS) ? "WPS" : "",
+        (pmlmepriv->wpa_phase == _TRUE) ? "WPA" : "");
+} else {
+    /* ✅ Gunakan cur_network_scanned jika ada */
+    pwlan = pmlmepriv->cur_network_scanned;
+    if (pwlan && _rtw_memcmp(pwlan->network.MacAddress, tgt_network->network.MacAddress, ETH_ALEN)) {
+        pwlan->fixed = _FALSE;
+        RTW_INFO("Free disconnecting network of scanned_queue using cur_network_scanned\n");
+        rtw_free_network_nolock(adapter, pwlan);
+        pmlmepriv->cur_network_scanned = NULL;
+    } else {
+        /* Fallback: cari seperti biasa */
+        pwlan = _rtw_find_same_network(&pmlmepriv->scanned_queue, tgt_network);
+        if (pwlan) {
+            pwlan->fixed = _FALSE;
+            RTW_INFO("Free disconnecting network of scanned_queue\n");
+            rtw_free_network_nolock(adapter, pwlan);
+            pmlmepriv->cur_network_scanned = NULL;
+        } else {
+            RTW_INFO("Network already removed from scanned_queue, no action needed\n");
+            /* ✅ Ubah level error menjadi info saja */
+        }
+    }
 #ifdef CONFIG_P2P
-			if (!rtw_p2p_chk_state(&adapter->wdinfo, P2P_STATE_NONE)) {
-				rtw_set_scan_deny(adapter, 2000);
-				/* rtw_clear_scan_deny(adapter); */
-			}
+	if (!rtw_p2p_chk_state(&adapter->wdinfo, P2P_STATE_NONE)) {
+		rtw_set_scan_deny(adapter, 2000);
+		/* rtw_clear_scan_deny(adapter); */
+	}
 #endif /* CONFIG_P2P */
-		} else
-			RTW_ERR("Free disconnecting network of scanned_queue failed due to pwlan == NULL\n\n");
-	}
+}
 
-	if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) && (adapter->stapriv.asoc_sta_count == 1))
-	    /*||check_fwstate(pmlmepriv, WIFI_STATION_STATE)*/) {
-		if (pwlan)
-			rtw_free_network_nolock(adapter, pwlan);
-	}
-
-	if (lock_scanned_queue)
-		_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
+if (lock_scanned_queue)
+    _exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
 
 	adapter->securitypriv.key_mask = 0;
 

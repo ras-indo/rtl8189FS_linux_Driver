@@ -1,0 +1,1 @@
+cmd_/root/rtl8189FS_linux_Driver/8189fs.o := ld -EL  -maarch64elf -z noexecstack --no-warn-rwx-segments --strip-debug --strip-debug  -r -o /root/rtl8189FS_linux_Driver/8189fs.o @/root/rtl8189FS_linux_Driver/8189fs.mod 
